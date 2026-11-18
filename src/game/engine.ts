@@ -528,7 +528,8 @@ export class Game {
   private range(par: number, base: number, amp: number, color: string, seed: number, trees = false) {
     const { ctx } = this;
     const off = this.camX * par;
-    const yoff = -this.camY * par * 0.15;
+    // subtract the mean downhill trend so the ranges stay on screen however far you ride
+    const yoff = -(this.camY - this.camX * 0.36) * par * 0.15;
     const z = this.zoom;
     ctx.fillStyle = color;
     ctx.beginPath();

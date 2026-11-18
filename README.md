@@ -66,6 +66,8 @@ Browser (React + Canvas)
 
 Explorer: [package](https://suiscan.xyz/testnet/object/0x4a41b5bc80946af797f4d48642f4d3083865126f11c7c7cc12c1702495241db3) · [leaderboard](https://suiscan.xyz/testnet/object/0xf3c9a2490f371afd60528a4d1082d0ec9042c7bb83d3e5157dd908d6dbbed01f)
 
+> **Transparency note on the demo entry.** At the time of submission the v3 leaderboard has one entry, **"Demo Run" (9,488 points)**. It was posted while recording the demo video. The run was played in the real live game by an **automated input bot**, not a human. The bot only pressed and released Space; it did not change the score, the physics or the game state. It was submitted from a throwaway **testnet burner wallet** (`0xb310d17a…bd67747`), which also minted the Silver badge shown in the video ([submit tx](https://suiscan.xyz/testnet/tx/7TaAiEZ8YeHZwNAck78W73KdGV6hnimeufFr6X9RRv7L) · [mint tx](https://suiscan.xyz/testnet/tx/4HK4Lagv9CoJdpnQ681XJzy1M9dzAPRFUedqXvCBKGcN) · [badge](https://suiscan.xyz/testnet/object/0xe50dc029b7bb79281a89b0dafc1248bb47b67bf370d20c6a861ba13d4480493f)). Every other entry comes from players using the live site. Earlier test packages (v1, v2) are abandoned and the game doesn't use them.
+
 ### Walrus: badge artwork
 
 Each tier's artwork (`docs/badges/*.png`) is a blob on **Walrus testnet**, stored for 53 epochs (about early January 2027, given testnet's one-day epochs). The blob IDs are hard-coded in the Move package, so the NFT's `image_url` always points at the matching Walrus blob. The game-over screen also loads the badge art straight from Walrus.
