@@ -5,7 +5,7 @@ import { Game, type Hud, type RunResult } from './game/engine';
 import { audio } from './game/audio';
 import { lofiHeadSVG } from './game/lofi';
 import { EXPLORER, LEADERBOARD_ID, PACKAGE_ID } from './sui/config';
-import { explainError, fetchBoard, mintBadgeTx, short, submitScoreTx, tierFor, TIERS, type Board } from './sui/leaderboard';
+import { explainError, fetchBoard, mintBadgeTx, short, submitScoreTx, tierFor, TIERS, WALRUS_AGGREGATOR, type Board } from './sui/leaderboard';
 
 type Screen = 'title' | 'playing' | 'over';
 type TxState = { kind: 'idle' } | { kind: 'busy'; label: string } | { kind: 'ok'; label: string; digest: string } | { kind: 'err'; msg: string };
@@ -39,8 +39,6 @@ export default function App() {
   useEffect(() => {
     const g = new Game(canvasRef.current!);
     gameRef.current = g;
-    // test hook for the burner-wallet demo mode only
-    if (new URLSearchParams(location.search).has('burner')) (window as unknown as { __lofiGame: Game }).__lofiGame = g;
     g.onHud = setHud;
     g.onOver = (r) => {
       setResult(r);
@@ -158,12 +156,13 @@ export default function App() {
           <p className="tag">Shred Mount Lofi. Flip for points. Put your best run on Sui.</p>
           <button className="primary" onClick={play}>Play</button>
           <div className="how">
-            <div><kbd>Tap</kbd> / <kbd>Space</kbd> jump</div>
-            <div><kbd>Hold</kbd> in the air to backflip</div>
-            <div>Land on your board · dodge rocks & ice · grab ◆</div>
+            <div className="ctl"><span className="keys"><kbd>Space</kbd><kbd>Tap</kbd></span><span>Jump</span></div>
+            <div className="ctl"><span className="keys"><kbd>Hold</kbd></span><span>Backflip</span></div>
+            <div className="ctl"><span className="keys"><kbd className="gemkey">◆</kbd></span><span>Collect</span></div>
           </div>
+          <p className="rule">Land on your board. Dodge rocks and ice.</p>
           <button className="ghost" onClick={() => setShowBoard(true)}>On-chain leaderboard</button>
-          <p className="fine">Best: {best.toLocaleString()} · No wallet needed to play</p>
+          <p className="meta">Best {best.toLocaleString()} <span>·</span> No wallet needed to play</p>
         </main>
       )}
 
@@ -191,6 +190,7 @@ export default function App() {
                   </button>
                 </div>
                 <div className="badge-row">
+                  {tier && <img className="badge-art" src={WALRUS_AGGREGATOR + tier.blob} alt={`${tier.name} badge`} title="Badge artwork served from Walrus" />}
                   {tier ? (
                     <button className="tier" style={{ borderColor: tier.color, color: tier.color }} disabled={tx.kind === 'busy' || !submitted || minted} onClick={mint}>
                       {minted ? `${tier.name} badge minted ✓` : `Mint ${tier.name} Badge NFT`}
@@ -224,7 +224,7 @@ export default function App() {
           {board && (
             <>
               <ol>
-                {board.top.length === 0 && <li className="muted">No runs yet — be the first yeti.</li>}
+                {board.top.length === 0 && <li className="empty">No runs yet. Be the first yeti on the board.</li>}
                 {board.top.map((e, i) => (
                   <li key={e.player} className={account?.address === e.player ? 'me' : ''}>
                     <span className="rank">{i + 1}</span>

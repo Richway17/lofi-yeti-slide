@@ -4,7 +4,9 @@
 
 **Shred Mount Lofi as Lofi the Yeti, flip for points, and put your best run on Sui.**
 
-Lofi Slide is an endless snowboarding arcade game made for **CLAY Hackathon III** (mini-game track). It runs in any desktop or mobile browser. You don't need a wallet to play. If you connect a Sui wallet, you can post your run to an **on-chain leaderboard** and mint a **Summit Badge NFT**, written in Move and deployed on **Sui testnet**.
+**▶ Play now: https://lofi-slide.vercel.app** · Built for **CLAY Hackathon III · Mini-game track**
+
+Lofi Slide is an endless snowboarding arcade game made for **CLAY Hackathon III** (mini-game track). It runs in any desktop or mobile browser, in portrait or landscape. **You can play right away with no wallet and no sign-up.** A wallet is only needed when you want to save a score on-chain. If you connect a Sui wallet, you can post your run to an **on-chain leaderboard** and mint a **Summit Badge NFT**, written in Move and deployed on **Sui testnet**.
 
 | Title | Gameplay | On-chain game over |
 |---|---|---|
@@ -49,7 +51,8 @@ Browser (React + Canvas)
        ├─ Leaderboard (shared object): top-10, personal bests (Table), minted tiers (Table), total runs
        ├─ submit_score(name, score, distance, Clock)  → emits ScoreSubmitted
        ├─ mint_badge_to_sender()                       → SummitBadge NFT, emits BadgeMinted
-       └─ Display V2 (DisplayRegistry 0xd) → badge name / description / on-chain SVG image
+       └─ Display V2 (DisplayRegistry 0xd) → badge name / description / image_url
+ Walrus testnet ── badge artwork, one blob per tier; the NFT's image_url points at the Walrus aggregator
  Reads: SuiGrpcClient.core.getObject(...) → live leaderboard, with no wallet needed
 ```
 
@@ -57,16 +60,29 @@ Browser (React + Canvas)
 
 | | ID |
 |---|---|
-| **Package ID** | `0x5c0511a014bfef0372068c83efc94482defd70fdf7c9add1ce786897f8afa13d` |
-| Leaderboard (shared object) | `0x316fa5f380dea9d20d3bde14b79a0c49444ec043c6eac74a94dfd4db8631e5e1` |
-| Publish tx | `x3EgoHfMu68W6XFZWp9AoPfMf8yDkxRGCcKVKeFiXTW` |
+| **Package ID** | `0x4a41b5bc80946af797f4d48642f4d3083865126f11c7c7cc12c1702495241db3` |
+| Leaderboard (shared object) | `0xf3c9a2490f371afd60528a4d1082d0ec9042c7bb83d3e5157dd908d6dbbed01f` |
+| Publish tx | `4Jn99hSXUoLCrc72NiuDHVcaDAbjxqSF4QZSprcQtVXc` |
 
-Explorer: [package](https://suiscan.xyz/testnet/object/0x5c0511a014bfef0372068c83efc94482defd70fdf7c9add1ce786897f8afa13d) · [leaderboard](https://suiscan.xyz/testnet/object/0x316fa5f380dea9d20d3bde14b79a0c49444ec043c6eac74a94dfd4db8631e5e1)
+Explorer: [package](https://suiscan.xyz/testnet/object/0x4a41b5bc80946af797f4d48642f4d3083865126f11c7c7cc12c1702495241db3) · [leaderboard](https://suiscan.xyz/testnet/object/0xf3c9a2490f371afd60528a4d1082d0ec9042c7bb83d3e5157dd908d6dbbed01f)
+
+### Walrus: badge artwork
+
+Each tier's artwork (`docs/badges/*.png`) is a blob on **Walrus testnet**, stored for 53 epochs (about early January 2027, given testnet's one-day epochs). The blob IDs are hard-coded in the Move package, so the NFT's `image_url` always points at the matching Walrus blob. The game-over screen also loads the badge art straight from Walrus.
+
+| Tier | Min score | Walrus blob ID |
+|---|---|---|
+| Bronze | 1,000 | [`l76ptFGafZqo7ZW0IyUDV2OoBQQ2151Z5a8RJmDeWwU`](https://aggregator.walrus-testnet.walrus.space/v1/blobs/l76ptFGafZqo7ZW0IyUDV2OoBQQ2151Z5a8RJmDeWwU) |
+| Silver | 5,000 | [`W_cnZGcVTDMly5cKGTQVYg8PH44PtdvSuGktYyEn1k4`](https://aggregator.walrus-testnet.walrus.space/v1/blobs/W_cnZGcVTDMly5cKGTQVYg8PH44PtdvSuGktYyEn1k4) |
+| Gold | 15,000 | [`Ufclv5iLTOHpT5hKuCXrEFgROHSOnliJTxZY8SBGq0Q`](https://aggregator.walrus-testnet.walrus.space/v1/blobs/Ufclv5iLTOHpT5hKuCXrEFgROHSOnliJTxZY8SBGq0Q) |
+| Summit | 40,000 | [`_rHci0zskSfV5ynnowlZuQKfRCh-PC6HnN41-jmlgwU`](https://aggregator.walrus-testnet.walrus.space/v1/blobs/_rHci0zskSfV5ynnowlZuQKfRCh-PC6HnN41-jmlgwU) |
+
+![badges](docs/badges/sheet.png)
 
 ### Move package (`move/lofi_slide`)
 
 - **`Leaderboard`** is a shared object. It holds a sorted top-10 with at most one entry per player, plus a `Table<address, u64>` of every player's personal best. Only improvements update your best or your rank.
-- **`SummitBadge`** is a `key + store` NFT with four tiers: **Bronze** at 1,000, **Silver** at 5,000, **Gold** at 15,000 and **Summit** at 40,000. Minting checks your **on-chain** personal best, so you have to submit a run before you can mint. Each tier can be minted only once per player, and you can always move up to a higher tier. The badge image is an SVG data URI stored on-chain, so it renders in wallets with no off-chain hosting.
+- **`SummitBadge`** is a `key + store` NFT with four tiers: **Bronze** at 1,000, **Silver** at 5,000, **Gold** at 15,000 and **Summit** at 40,000. Minting checks your **on-chain** personal best, so you have to submit a run before you can mint. Each tier can be minted only once per player, and you can always move up to a higher tier. The badge artwork is stored on **Walrus** (see above). Each badge carries `image_url` (Walrus aggregator URL) and `walrus_blob_id`.
 - **Events:** `ScoreSubmitted` (player, name, score, distance, new_best, rank) and `BadgeMinted`.
 - **Display V2:** after publishing, `setup_display(AdminCap, DisplayRegistry)` registers the NFT metadata through the new `sui::display_registry`.
 - **Unit tests** cover ranking, dedup, the top-10 cap and the one-mint-per-tier rule.
@@ -124,13 +140,15 @@ docs/                 logo + screenshots
 
 ## Roadmap
 
-- Verified runs: deterministic seeds, input logs on **Walrus**, and attestation checks on-chain.
-- Weekly seasons, with the leaderboard reset by the AdminCap and prizes for the top runs.
-- Unlockable boards and scarves as on-chain cosmetics.
+- **Anti-cheat:** server-signed scores verified on-chain, plus replayable runs (seed and input log) stored on **Walrus**.
+- **Walrus Sites:** host the game itself on Walrus.
+- **Seasons:** weekly leaderboards reset by the AdminCap, with prizes for the top runs.
+- **Unlockable boards and scarves** as on-chain collectibles.
+- **Charity seasons** supporting Lofi's clean-water mission.
 - A mainnet deployment.
 
 ## Credits
 
-Made for CLAY Hackathon III (Code Like A Yeti), hosted by the Lofi Foundation. Lofi the Yeti is the Lofi community mascot. All art, audio and code in this repo are original.
+Built for **CLAY Hackathon III · Mini-game track** (Code Like A Yeti), hosted by the Lofi Foundation. Lofi the Yeti is the Lofi community mascot. All art, audio and code in this repo are original.
 
 MIT licensed.

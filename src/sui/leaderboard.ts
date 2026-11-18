@@ -4,11 +4,13 @@ import { LEADERBOARD_ID, PACKAGE_ID, readClient } from './config';
 export interface BoardEntry { player: string; name: string; score: number; distance: number; timestamp: number }
 export interface Board { top: BoardEntry[]; totalRuns: number }
 
+export const WALRUS_AGGREGATOR = 'https://aggregator.walrus-testnet.walrus.space/v1/blobs/';
+/** Badge artwork blobs on Walrus testnet — the same IDs are hard-coded in the Move package. */
 export const TIERS = [
-  { tier: 1, name: 'Bronze', min: 1_000, color: '#d98a4e' },
-  { tier: 2, name: 'Silver', min: 5_000, color: '#cfd8e3' },
-  { tier: 3, name: 'Gold', min: 15_000, color: '#ffc93c' },
-  { tier: 4, name: 'Summit', min: 40_000, color: '#5ee7ff' },
+  { tier: 1, name: 'Bronze', min: 1_000, color: '#d98a4e', blob: 'l76ptFGafZqo7ZW0IyUDV2OoBQQ2151Z5a8RJmDeWwU' },
+  { tier: 2, name: 'Silver', min: 5_000, color: '#cfd8e3', blob: 'W_cnZGcVTDMly5cKGTQVYg8PH44PtdvSuGktYyEn1k4' },
+  { tier: 3, name: 'Gold', min: 15_000, color: '#ffc93c', blob: 'Ufclv5iLTOHpT5hKuCXrEFgROHSOnliJTxZY8SBGq0Q' },
+  { tier: 4, name: 'Summit', min: 40_000, color: '#5ee7ff', blob: '_rHci0zskSfV5ynnowlZuQKfRCh-PC6HnN41-jmlgwU' },
 ];
 export const tierFor = (score: number) => [...TIERS].reverse().find(t => score >= t.min) ?? null;
 

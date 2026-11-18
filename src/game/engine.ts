@@ -500,7 +500,7 @@ export class Game {
 
     // popups
     ctx.textAlign = 'center';
-    ctx.font = '800 22px Inter, system-ui, sans-serif';
+    ctx.font = '700 22px "Space Grotesk Variable", system-ui, sans-serif';
     for (const p of this.pops) {
       ctx.globalAlpha = Math.max(0, 1 - p.life / 1.1);
       ctx.fillStyle = 'rgba(8,20,48,0.55)';

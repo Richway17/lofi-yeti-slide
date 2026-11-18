@@ -40,6 +40,7 @@ fun submit_and_rank() {
     {
         let b = sc.take_from_sender<SummitBadge>();
         assert!(leaderboard::badge_tier(&b) == 2);
+        assert!(leaderboard::badge_image_url(&b) == string::utf8(b"https://aggregator.walrus-testnet.walrus.space/v1/blobs/W_cnZGcVTDMly5cKGTQVYg8PH44PtdvSuGktYyEn1k4"));
         sc.return_to_sender(b);
     };
     clk.destroy_for_testing();

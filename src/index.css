@@ -1,7 +1,16 @@
+@font-face {
+  font-family: 'Inter Variable'; font-style: normal; font-display: swap; font-weight: 100 900;
+  src: url('../node_modules/@fontsource-variable/inter/files/inter-latin-wght-normal.woff2') format('woff2-variations');
+}
+@font-face {
+  font-family: 'Space Grotesk Variable'; font-style: normal; font-display: swap; font-weight: 300 700;
+  src: url('../node_modules/@fontsource-variable/space-grotesk/files/space-grotesk-latin-wght-normal.woff2') format('woff2-variations');
+}
+
 :root {
   --ink: #f4f7ff;
-  --ink-2: rgba(232, 239, 255, 0.68);
-  --ink-3: rgba(232, 239, 255, 0.45);
+  --ink-2: rgba(236, 242, 255, 0.78);
+  --ink-3: rgba(236, 242, 255, 0.58);
   --navy: #081430;
   --glass: rgba(7, 16, 38, 0.74);
   --line: rgba(255, 255, 255, 0.1);
@@ -58,7 +67,7 @@ a:hover { text-decoration: underline; }
   pointer-events: none;
 }
 .topbar > * { pointer-events: auto; }
-.brand { display: flex; align-items: center; gap: 10px; font-family: var(--display); letter-spacing: 0.08em; font-size: 15px; height: 40px; }
+.brand { display: flex; align-items: center; gap: 10px; font-family: var(--display); letter-spacing: 0.06em; font-size: 15px; font-weight: 700; height: 40px; }
 .brand img { width: 30px; height: 30px; }
 .top-actions { display: flex; gap: 10px; align-items: center; }
 .icon {
@@ -75,7 +84,7 @@ a:hover { text-decoration: underline; }
   letter-spacing: -0.02em; font-variant-numeric: tabular-nums;
   text-shadow: 0 2px 16px rgba(8, 20, 48, 0.45);
 }
-.hud-row { display: flex; gap: 14px; margin-top: 8px; font-size: 13px; font-weight: 600; color: var(--ink-2); font-variant-numeric: tabular-nums; text-shadow: 0 1px 8px rgba(8,20,48,.5); }
+.hud-row { display: flex; gap: 14px; margin-top: 8px; font-size: 15px; font-weight: 650; color: rgba(255,255,255,.88); font-variant-numeric: tabular-nums; text-shadow: 0 1px 2px rgba(8,20,48,.55), 0 1px 10px rgba(8,20,48,.5); }
 .hud-row .gem { color: #8fe0ff; }
 .hud-row .combo { color: var(--gold); }
 .hint {
@@ -99,12 +108,12 @@ a:hover { text-decoration: underline; }
 
 .hero { width: 96px; height: 96px; display: block; margin: -4px auto 10px; filter: drop-shadow(0 10px 24px rgba(0,0,0,.35)); }
 h1, h2 { font-family: var(--display); margin: 0; letter-spacing: 0.02em; }
-h1 { font-size: 40px; font-weight: 700; line-height: 1; }
+h1 { font-size: 42px; font-weight: 700; line-height: 1; letter-spacing: -0.01em; }
 h2 { font-size: 26px; font-weight: 700; margin-bottom: 14px; }
-.tag { margin: 12px 0 24px; color: var(--ink-2); font-size: 15px; line-height: 1.5; }
+.tag { margin: 12px auto 24px; max-width: 320px; color: var(--ink-2); font-size: 15px; line-height: 1.5; }
 .eyebrow { margin: 0 0 6px; font-size: 12px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: var(--ink-3); }
-.muted { color: var(--ink-2); font-size: 13px; line-height: 1.5; margin: 0; }
-.fine { color: var(--ink-3); font-size: 12px; margin: 16px 0 0; line-height: 1.5; }
+.muted { color: var(--ink-2); font-size: 14px; line-height: 1.5; margin: 0; }
+.fine { color: var(--ink-2); font-size: 13px; margin: 16px 0 0; line-height: 1.5; }
 
 button { font: inherit; }
 .primary, .ghost, .tier {
@@ -120,11 +129,22 @@ button { font: inherit; }
 .ghost:hover { background: rgba(255,255,255,.05); }
 button:disabled { opacity: .5; cursor: default; box-shadow: none; }
 
-.how { display: grid; gap: 8px; margin: 22px 0 8px; font-size: 13px; color: var(--ink-2); }
-kbd {
-  font-family: var(--body); font-size: 11px; font-weight: 700; padding: 3px 7px; border-radius: 6px;
-  background: rgba(255,255,255,.08); border: 1px solid var(--line); color: var(--ink);
+.how { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 22px 0 0; }
+.ctl {
+  display: flex; flex-direction: column; align-items: center; gap: 8px;
+  padding: 12px 6px; border-radius: 14px; background: rgba(255,255,255,.04); border: 1px solid var(--line);
+  font-size: 13px; font-weight: 550; color: var(--ink-2); line-height: 1.25;
 }
+.keys { display: flex; gap: 4px; }
+kbd {
+  display: inline-grid; place-items: center; min-width: 26px; height: 24px; padding: 0 8px; border-radius: 7px;
+  font-family: var(--body); font-size: 11px; font-weight: 700; letter-spacing: .02em;
+  background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.14); border-bottom-width: 2px; color: var(--ink);
+}
+kbd.gemkey { color: #8fe0ff; font-size: 12px; }
+.rule { margin: 14px 0 18px; font-size: 14px; color: var(--ink-2); }
+.meta { margin: 16px 0 0; font-size: 14px; color: var(--ink-2); font-variant-numeric: tabular-nums; }
+.meta span { color: var(--ink-3); margin: 0 4px; }
 
 /* game over */
 .big { font-family: var(--display); font-weight: 700; font-size: 64px; line-height: 1; letter-spacing: -.03em; font-variant-numeric: tabular-nums; }
@@ -169,3 +189,30 @@ kbd {
 .name-row > button { flex: 0 0 auto; }
 .name-row input { width: 0; }
 .chain { min-width: 0; overflow: hidden; }
+.board li.empty { display: block; text-align: center; padding: 18px 12px; color: var(--ink-2); font-size: 14px; }
+.badge-art { width: 48px; height: 48px; border-radius: 12px; flex: none; box-shadow: 0 4px 14px rgba(0,0,0,.35); }
+.badge-row .muted { flex: 1 1 140px; }
+
+/* short landscape screens (phones held sideways) */
+@media (max-height: 520px) and (orientation: landscape) {
+  .panel { top: calc(50% + 18px); max-height: calc(100dvh - 72px); padding: 16px 20px; width: min(560px, calc(100vw - 32px)); }
+  .hero { display: none; }
+  h1 { font-size: 30px; }
+  .tag { margin: 6px auto 12px; font-size: 14px; max-width: 440px; }
+  .how { margin-top: 12px; }
+  .ctl { padding: 8px 6px; }
+  .rule { margin: 8px 0 10px; }
+  .meta { margin-top: 10px; }
+  .big { font-size: 40px; }
+  .stats { margin: 10px 0; }
+  .stats div { padding: 6px 4px; }
+  .chain { padding: 10px; margin-bottom: 10px; }
+  .primary, .ghost { height: 42px; }
+  .topbar { padding-top: 10px; }
+  .hud-score { font-size: 30px; }
+  .title .rule, .title .meta { display: none; }
+  .actions { grid-template-columns: 1fr 1fr; gap: 10px; }
+  .actions .ghost { margin-top: 0; }
+  .eyebrow { margin-bottom: 2px; }
+  .pb { margin-top: 4px; }
+}

@@ -60,6 +60,8 @@ public struct SummitBadge has key, store {
     tier_name: String,
     score: u64,
     image_url: String,
+    /// Walrus blob ID of the tier artwork.
+    walrus_blob_id: String,
 }
 
 public struct ScoreSubmitted has copy, drop {
@@ -163,6 +165,7 @@ public fun mint_badge(lb: &mut Leaderboard, ctx: &mut TxContext): SummitBadge {
         tier_name: tier_name(tier),
         score: best,
         image_url: tier_image(tier),
+        walrus_blob_id: string::utf8(tier_blob(tier)),
     };
     event::emit(BadgeMinted { player, badge_id: object::id(&badge), tier, score: best });
     badge
@@ -194,6 +197,8 @@ public fun entry_player(e: &Entry): address { e.player }
 
 public fun badge_tier(b: &SummitBadge): u8 { b.tier }
 
+public fun badge_image_url(b: &SummitBadge): String { b.image_url }
+
 public fun tier_for(score: u64): u8 {
     if (score >= TIER_SUMMIT) 4
     else if (score >= TIER_GOLD) 3
@@ -211,15 +216,17 @@ fun tier_name(tier: u8): String {
     else string::utf8(b"Bronze")
 }
 
+/// Badge artwork is stored on Walrus testnet (one blob per tier, uploaded for 53 epochs).
+fun tier_blob(tier: u8): vector<u8> {
+    if (tier == 4) b"_rHci0zskSfV5ynnowlZuQKfRCh-PC6HnN41-jmlgwU"
+    else if (tier == 3) b"Ufclv5iLTOHpT5hKuCXrEFgROHSOnliJTxZY8SBGq0Q"
+    else if (tier == 2) b"W_cnZGcVTDMly5cKGTQVYg8PH44PtdvSuGktYyEn1k4"
+    else b"l76ptFGafZqo7ZW0IyUDV2OoBQQ2151Z5a8RJmDeWwU"
+}
+
 fun tier_image(tier: u8): String {
-    // Inline SVG data URI so the badge renders in wallets without any off-chain host.
-    let color = if (tier == 4) b"5ee7ff"
-        else if (tier == 3) b"ffc93c"
-        else if (tier == 2) b"cfd8e3"
-        else b"d98a4e";
-    let mut s = b"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='18' fill='%230b1b3a'/><polygon points='50,14 86,82 14,82' fill='%23";
-    s.append(color);
-    s.append(b"'/><polygon points='50,14 62,37 38,37' fill='white'/><circle cx='50' cy='64' r='9' fill='%233b82f6'/></svg>");
+    let mut s = b"https://aggregator.walrus-testnet.walrus.space/v1/blobs/";
+    s.append(tier_blob(tier));
     string::utf8(s)
 }
 
