@@ -1,0 +1,6 @@
+[package]
+name = "lofi_slide"
+edition = "2024"
+
+[addresses]
+lofi_slide = "0x0"
